@@ -19,7 +19,7 @@ export async function getPdfPageCount(file: File): Promise<number> {
     const buffer = await file.arrayBuffer();
     const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
     return pdfDoc.getPageCount();
-  } catch (e) {
+  } catch {
     throw new Error(`Failed to parse PDF: ${file.name}`);
   }
 }
@@ -59,7 +59,9 @@ export async function generatePackagePdf(
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-  let embeddedSeal: any = null;
+  type EmbeddedImage = Awaited<ReturnType<PDFDocument['embedPng']>>;
+
+  let embeddedSeal: EmbeddedImage | null = null;
   if (sealImageBytes) {
     try {
       embeddedSeal = await pdfDoc.embedPng(sealImageBytes);
@@ -199,20 +201,6 @@ export async function generatePackagePdf(
   });
   iy -= 30;
 
-  // We need to calculate where each doc starts
-  // Cover is page 1, Index is page 2, docs start at page 3
-  let currentDocPage = 3;
-  const indexEntries: { title: string; startPage: number; pages: number }[] = [];
-
-  for (const { req, file } of docsToMerge) {
-    indexEntries.push({
-      title: req.title_en,
-      startPage: currentDocPage,
-      pages: file.pages,
-    });
-    currentDocPage += file.pages;
-  }
-
   // Table header
   indexPage.drawText('#', { x: leftMargin, y: iy, size: 9, font: fontBold, color: rgb(0.4, 0.4, 0.5) });
   indexPage.drawText('Document', { x: leftMargin + 30, y: iy, size: 9, font: fontBold, color: rgb(0.4, 0.4, 0.5) });
@@ -222,8 +210,43 @@ export async function generatePackagePdf(
   indexPage.drawRectangle({ x: leftMargin, y: iy, width: maxTextWidth, height: 0.5, color: rgb(0.8, 0.8, 0.85) });
   iy -= 18;
 
-  for (let i = 0; i < indexEntries.length; i++) {
-    const entry = indexEntries[i];
+  // ======== MERGE DOCUMENT PAGES ========
+  // Each source page is placed on a slightly taller page so that a reserved
+  // empty band exists at the bottom — the footer sits inside that band and
+  // can never overlap the source document's content.
+  const mergedEntries: { title: string; startPage: number; pages: number }[] = [];
+  let nextPageNumber = 3; // cover = page 1, index = page 2
+
+  for (const { req, file } of docsToMerge) {
+    try {
+      const buffer = await file.file.arrayBuffer();
+      const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+      const srcPages = srcDoc.getPages();
+      const embeddedPages = await pdfDoc.embedPages(srcPages);
+
+      for (let i = 0; i < srcPages.length; i++) {
+        const { width: sw, height: sh } = srcPages[i].getSize();
+        const page = pdfDoc.addPage([sw, sh + FOOTER_BAND]);
+        page.drawPage(embeddedPages[i], { x: 0, y: FOOTER_BAND });
+      }
+
+      // Only pages that actually merged are counted, so the index page
+      // numbers and "Page X of Y" stay correct even if a damaged file
+      // had to be skipped.
+      mergedEntries.push({
+        title: req.title_en,
+        startPage: nextPageNumber,
+        pages: srcPages.length,
+      });
+      nextPageNumber += srcPages.length;
+    } catch (err) {
+      console.error(`Failed to merge ${file.name}:`, err);
+    }
+  }
+
+  // ======== INDEX ROWS ========
+  for (let i = 0; i < mergedEntries.length; i++) {
+    const entry = mergedEntries[i];
     indexPage.drawText(`${i + 1}`, { x: leftMargin + 4, y: iy, size: 10, font, color: rgb(0.3, 0.3, 0.35) });
     indexPage.drawText(entry.title, { x: leftMargin + 30, y: iy, size: 10, font, color: rgb(0.15, 0.15, 0.2) });
     indexPage.drawText(`${entry.startPage}`, { x: coverWidth - leftMargin - 52, y: iy, size: 10, font, color: rgb(0.3, 0.3, 0.35) });
@@ -232,25 +255,13 @@ export async function generatePackagePdf(
     if (iy < 80) break;
   }
 
-  // ======== MERGE DOCUMENT PAGES ========
-  for (const { file } of docsToMerge) {
-    try {
-      const buffer = await file.file.arrayBuffer();
-      const srcDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-      const copiedPages = await pdfDoc.copyPages(srcDoc, srcDoc.getPageIndices());
-      copiedPages.forEach(p => pdfDoc.addPage(p));
-    } catch (err) {
-      console.error(`Failed to merge ${file.name}:`, err);
-    }
-  }
-
   // ======== ADD FOOTERS & SEALS ========
   const totalPages = pdfDoc.getPageCount();
   const allPages = pdfDoc.getPages();
 
   for (let i = 0; i < totalPages; i++) {
     const page = allPages[i];
-    const { width: pw, height: ph } = page.getSize();
+    const { width: pw } = page.getSize();
     const footerText = `${tenderData.tender.tender_id} | Page ${i + 1} of ${totalPages}`;
     const textWidth = font.widthOfTextAtSize(footerText, 9);
 

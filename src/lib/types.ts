@@ -38,6 +38,7 @@ export interface Translations {
   appSubtitle: string;
   uploadReq: string;
   uploadReqDesc: string;
+  loadSample: string;
   tenderDetails: string;
   id: string;
   title: string;
@@ -68,6 +69,15 @@ export interface Translations {
   orBrowse: string;
   resetAll: string;
   exportChecklist: string;
+  autoMatch: string;
+  sealStamp: string;
+  preview: string;
+  filterAll: string;
+  filterAttention: string;
+  filterCompleted: string;
+  searchPlaceholder: string;
+  saveWorkspace: string;
+  restoreWorkspace: string;
   status: Record<Status, string>;
 }
 
@@ -78,6 +88,7 @@ export function getTranslations(lang: Language): Translations {
       appSubtitle: 'আপনার টেন্ডার জমাদানের নথি প্যাকেজ তৈরি করুন',
       uploadReq: 'requirements.json আপলোড করুন',
       uploadReqDesc: 'টেন্ডারের প্রয়োজনীয়তার ফাইল নির্বাচন করুন',
+      loadSample: 'নমুনা ডেটা লোড করুন',
       tenderDetails: 'টেন্ডারের বিস্তারিত',
       id: 'টেন্ডার আইডি',
       title: 'শিরোনাম',
@@ -89,25 +100,34 @@ export function getTranslations(lang: Language): Translations {
       filesUploaded: 'আপলোড করা ফাইল',
       noFiles: 'এখনো কোন ফাইল আপলোড করা হয়নি',
       pages: 'পৃষ্ঠা',
-      duplicate: 'অনুলিপি',
-      remove: 'সরান',
+      duplicate: 'অনুলিপি (ডুপ্লিকেট)',
+      remove: 'মুছুন',
       requiredDocs: 'প্রয়োজনীয় কাগজপত্র',
       mandatory: 'বাধ্যতামূলক',
       optional: 'ঐচ্ছিক',
       expiryDate: 'মেয়াদ শেষ হওয়ার তারিখ',
       selectFile: '— একটি ফাইল নির্বাচন করুন —',
       generateBtn: 'প্যাকেজ তৈরি করুন',
-      generating: 'তৈরি হচ্ছে...',
+      generating: 'প্যাকেজ তৈরি হচ্ছে...',
       downloadReady: 'ডাউনলোড প্রস্তুত!',
-      blockedReasons: 'সমস্যা দূর করুন',
+      blockedReasons: 'অসম্পূর্ণ সমস্যাসমূহ',
       progress: 'অগ্রগতি',
-      completedDocs: 'সম্পন্ন',
+      completedDocs: 'সম্পন্ন নথি',
       coverPage: 'প্রচ্ছদ পৃষ্ঠা',
       indexPage: 'সূচিপত্র',
-      dragDrop: 'এখানে টেনে আনুন',
-      orBrowse: 'অথবা ব্রাউজ করুন',
-      resetAll: 'সব মুছুন',
-      exportChecklist: 'চেকলিস্ট এক্সপোর্ট',
+      dragDrop: 'পিডিএফ ফাইল এখানে টেনে আনুন',
+      orBrowse: 'অথবা ফাইল পছন্দ করতে ক্লিক করুন',
+      resetAll: 'রিসেট করুন',
+      exportChecklist: 'চেকলিস্ট CSV',
+      autoMatch: 'স্মার্ট অটো-ম্যাচ',
+      sealStamp: 'অফিসিয়াল সিল / স্ট্যাম্প',
+      preview: 'প্রিভিউ',
+      filterAll: 'সকল নথি',
+      filterAttention: 'জরুরি পদক্ষেপ প্রয়োজন',
+      filterCompleted: 'সম্পন্ন',
+      searchPlaceholder: 'নথি খুঁজুন...',
+      saveWorkspace: 'সংরক্ষণ করুন',
+      restoreWorkspace: 'পূর্বাবস্থায় ফিরুন',
       status: {
         'Missing': 'অনুপস্থিত',
         'Expiry date needed': 'মেয়াদ শেষের তারিখ প্রয়োজন',
@@ -120,10 +140,11 @@ export function getTranslations(lang: Language): Translations {
 
   return {
     appTitle: 'Tender Document Package Builder',
-    appSubtitle: 'Build your tender submission document package',
+    appSubtitle: 'Build your verified tender submission package',
     uploadReq: 'Upload requirements.json',
-    uploadReqDesc: 'Select the tender requirements file to get started',
-    tenderDetails: 'Tender Details',
+    uploadReqDesc: 'Select the tender requirements JSON to get started',
+    loadSample: 'Load Sample Data',
+    tenderDetails: 'Tender Overview',
     id: 'Tender ID',
     title: 'Title',
     entity: 'Procuring Entity',
@@ -142,23 +163,32 @@ export function getTranslations(lang: Language): Translations {
     expiryDate: 'Expiry Date',
     selectFile: '— Select a File —',
     generateBtn: 'Generate Package',
-    generating: 'Generating...',
+    generating: 'Generating Package...',
     downloadReady: 'Download Ready!',
-    blockedReasons: 'Resolve Issues',
-    progress: 'Progress',
-    completedDocs: 'Completed',
+    blockedReasons: 'Blocking Issues',
+    progress: 'Readiness Progress',
+    completedDocs: 'Ready',
     coverPage: 'Cover Page',
     indexPage: 'Index Page',
-    dragDrop: 'Drop files here',
-    orBrowse: 'or click to browse',
+    dragDrop: 'Drop PDF files here',
+    orBrowse: 'or click to browse your computer',
     resetAll: 'Reset All',
-    exportChecklist: 'Export Checklist',
+    exportChecklist: 'Export CSV',
+    autoMatch: 'Smart Auto-Match',
+    sealStamp: 'Official Seal Stamp',
+    preview: 'Preview',
+    filterAll: 'All Documents',
+    filterAttention: 'Needs Attention',
+    filterCompleted: 'Ready',
+    searchPlaceholder: 'Search document requirements...',
+    saveWorkspace: 'Save Draft',
+    restoreWorkspace: 'Restore Draft',
     status: {
       'Missing': 'Missing',
       'Expiry date needed': 'Expiry date needed',
       'Expired': 'Expired',
       'Not provided': 'Not provided',
-      'OK': 'OK',
+      'OK': 'Ready (OK)',
     },
   };
 }
