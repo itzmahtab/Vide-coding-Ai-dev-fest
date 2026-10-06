@@ -8,7 +8,7 @@ A modern, 100% client-side web application designed to help procurement and offi
 
 - **Participant Name:** Mahtab Uddin Mahi
 - **GitHub Repository:** [https://github.com/itzmahtab/Vide-coding-Ai-dev-fest](https://github.com/itzmahtab/Vide-coding-Ai-dev-fest)
-- **Live Public Website (HTTPS):** [https://tender-document-builder.vercel.app](https://tender-document-builder.vercel.app) *(or your deployed Vercel / Cloudflare Pages URL)*
+- **Live Public Website (HTTPS):* https://vide-coding-ai-dev-fest.vercel.app/
 - **Eligible Commit Hash:** *(Refer to latest commit ID)*
 
 ---
