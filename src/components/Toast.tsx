@@ -33,34 +33,34 @@ function ToastCard({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: str
 
   const typeConfig: Record<
     ToastType,
-    { border: string; bg: string; iconBg: string; text: string; icon: React.ReactNode }
+    { border: string; iconBg: string; text: string; icon: React.ReactNode; barBg: string }
   > = {
     success: {
-      border: 'border-emerald-500/40 shadow-emerald-500/10',
-      bg: 'bg-slate-900/95',
-      iconBg: 'bg-emerald-500/20 text-emerald-400',
-      text: 'text-emerald-300',
+      border: 'border-emerald-200',
+      iconBg: 'bg-emerald-50 text-emerald-600',
+      text: 'text-emerald-900',
+      barBg: 'bg-emerald-500',
       icon: <IconCheck className="w-4 h-4" />,
     },
     error: {
-      border: 'border-rose-500/40 shadow-rose-500/10',
-      bg: 'bg-slate-900/95',
-      iconBg: 'bg-rose-500/20 text-rose-400',
-      text: 'text-rose-300',
+      border: 'border-rose-200',
+      iconBg: 'bg-rose-50 text-[#ea2261]',
+      text: 'text-rose-900',
+      barBg: 'bg-[#ea2261]',
       icon: <IconX className="w-4 h-4" />,
     },
     warning: {
-      border: 'border-amber-500/40 shadow-amber-500/10',
-      bg: 'bg-slate-900/95',
-      iconBg: 'bg-amber-500/20 text-amber-400',
-      text: 'text-amber-300',
+      border: 'border-amber-200',
+      iconBg: 'bg-amber-50 text-[#9b6829]',
+      text: 'text-amber-900',
+      barBg: 'bg-[#9b6829]',
       icon: <IconAlertTriangle className="w-4 h-4" />,
     },
     info: {
-      border: 'border-indigo-500/40 shadow-indigo-500/10',
-      bg: 'bg-slate-900/95',
-      iconBg: 'bg-indigo-500/20 text-indigo-400',
-      text: 'text-indigo-300',
+      border: 'border-indigo-100',
+      iconBg: 'bg-[#533afd]/10 text-[#533afd]',
+      text: 'text-[#0d253d]',
+      barBg: 'bg-[#533afd]',
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
           <circle cx="12" cy="12" r="10" />
@@ -76,10 +76,7 @@ function ToastCard({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: str
   return (
     <div
       role="alert"
-      className={`relative overflow-hidden pointer-events-auto rounded-xl p-4 shadow-xl backdrop-blur-xl border ${cfg.border} ${cfg.bg} flex items-start gap-3 transition-all duration-300 animate-slide-in-right hover:translate-x-[-2px]`}
-      style={{
-        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4)',
-      }}
+      className={`relative overflow-hidden pointer-events-auto rounded-xl p-4 bg-white border ${cfg.border} shadow-[0_8px_24px_rgba(0,55,112,0.12),0_2px_6px_rgba(0,55,112,0.04)] flex items-start gap-3 transition-all duration-200 animate-slide-in-right hover:translate-x-[-2px]`}
     >
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${cfg.iconBg}`}>
         {cfg.icon}
@@ -87,31 +84,21 @@ function ToastCard({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: str
 
       <div className="flex-1 min-w-0 pr-2">
         <h4 className={`text-sm font-semibold tracking-tight ${cfg.text}`}>{title}</h4>
-        {message && <p className="text-xs text-slate-300/90 mt-0.5 leading-relaxed break-words">{message}</p>}
+        {message && <p className="text-xs text-[#64748d] mt-0.5 leading-relaxed break-words">{message}</p>}
       </div>
 
       <button
         onClick={() => onDismiss(id)}
-        className="text-slate-400 hover:text-slate-200 p-1 rounded-md transition-colors shrink-0"
+        className="text-[#64748d] hover:text-[#0d253d] p-1 rounded-md transition-colors shrink-0"
         aria-label="Close notification"
       >
         <IconX className="w-3.5 h-3.5" />
       </button>
 
       {/* Progress timer bar */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-[2px] bg-slate-700/50 overflow-hidden"
-      >
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-slate-100 overflow-hidden">
         <div
-          className={`h-full ${
-            type === 'success'
-              ? 'bg-emerald-400'
-              : type === 'error'
-              ? 'bg-rose-400'
-              : type === 'warning'
-              ? 'bg-amber-400'
-              : 'bg-indigo-400'
-          }`}
+          className={`h-full ${cfg.barBg}`}
           style={{
             animation: `toastCountdown ${duration}ms linear forwards`,
           }}

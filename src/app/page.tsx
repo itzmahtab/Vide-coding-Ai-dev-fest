@@ -592,7 +592,7 @@ function HomeContent() {
   };
 
   return (
-    <div className={`min-h-screen bg-slate-950 text-slate-100 ${lang === 'bn' ? 'font-bn' : ''}`}>
+    <div className={`min-h-screen stripe-mesh-bg text-[#0d253d] selection:bg-[#b9b9f9]/40 ${lang === 'bn' ? 'font-bn' : ''}`}>
       <Header
         t={t}
         lang={lang}

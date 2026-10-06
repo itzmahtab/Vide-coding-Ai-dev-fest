@@ -214,6 +214,8 @@ export async function generatePackagePdf(
   // Each source page is placed on a slightly taller page so that a reserved
   // empty band exists at the bottom — the footer sits inside that band and
   // can never overlap the source document's content.
+  const sealH = embeddedSeal ? embeddedSeal.height * 0.25 : 0;
+  const FOOTER_BAND = embeddedSeal ? Math.min(Math.max(28, sealH + 14), 90) : 28;
   const mergedEntries: { title: string; startPage: number; pages: number }[] = [];
   let nextPageNumber = 3; // cover = page 1, index = page 2
 

@@ -25,7 +25,7 @@ export default function GenerateBar({
 
   return (
     <div
-      className="sticky bottom-4 z-30 rounded-3xl bg-slate-950/90 border border-slate-800/90 backdrop-blur-2xl p-5 sm:p-6 shadow-2xl shadow-black/50 transition-all duration-300 animate-fade-in"
+      className="sticky bottom-4 z-30 rounded-2xl bg-white/95 border border-[#e3e8ee] backdrop-blur-xl p-5 sm:p-6 shadow-[0_12px_32px_rgba(0,55,112,0.12),0_2px_6px_rgba(0,55,112,0.06)] transition-all duration-200 animate-fade-in"
       id="generate-section"
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
@@ -34,20 +34,20 @@ export default function GenerateBar({
           {!canGenerate ? (
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
+                <span className="w-6 h-6 rounded-full bg-[#ea2261]/10 text-[#ea2261] flex items-center justify-center shrink-0">
                   <IconAlertTriangle className="w-3.5 h-3.5" />
                 </span>
-                <h3 className="text-sm font-bold text-rose-300">
+                <h3 className="text-sm font-semibold text-[#0d253d]">
                   {t.blockedReasons} ({blockingReasons.length})
                 </h3>
               </div>
 
               {blockingReasons.length > 0 && (
-                <div className="pl-8 text-xs text-slate-400 space-y-1">
+                <div className="pl-8 text-xs text-[#64748d] space-y-1">
                   {(showAllReasons ? blockingReasons : blockingReasons.slice(0, 2)).map(
                     (reason, idx) => (
                       <p key={idx} className="flex items-center gap-1.5 truncate">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-400/80 shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#ea2261] shrink-0" />
                         <span>{reason}</span>
                       </p>
                     )
@@ -57,7 +57,7 @@ export default function GenerateBar({
                     <button
                       type="button"
                       onClick={() => setShowAllReasons(prev => !prev)}
-                      className="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 underline underline-offset-2 transition-colors cursor-pointer mt-1"
+                      className="text-[11px] font-semibold text-[#533afd] hover:underline transition-colors cursor-pointer mt-1"
                     >
                       {showAllReasons
                         ? lang === 'en'
@@ -73,14 +73,14 @@ export default function GenerateBar({
             </div>
           ) : (
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/20">
-                <IconCheck className="w-4 h-4 text-emerald-400" />
+              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 shadow-[0_1px_3px_rgba(16,185,129,0.2)]">
+                <IconCheck className="w-4 h-4 text-emerald-600" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-emerald-300">
+                <h3 className="text-sm font-semibold text-[#0d253d]">
                   {lang === 'en' ? 'Tender Package Ready for Compilation' : 'টেন্ডার প্যাকেজ তৈরির জন্য সম্পূর্ণ প্রস্তুত'}
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#64748d]">
                   {lang === 'en'
                     ? 'All mandatory requirements satisfied and verified against deadline.'
                     : 'সবগুলো বাধ্যতামূলক নথিপত্র সফলভাবে যাচাই করা হয়েছে।'}
@@ -90,21 +90,17 @@ export default function GenerateBar({
           )}
         </div>
 
-        {/* Right CTA Button */}
+        {/* Right CTA Button: Stripe Single Primary Indigo Pill */}
         <div className="shrink-0 flex items-center">
           <button
             onClick={onGenerate}
             disabled={!canGenerate || isGenerating}
             id="generate-btn"
-            className={`w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2.5 transition-all duration-300 ${
-              canGenerate && !isGenerating
-                ? 'bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-extrabold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98] cursor-pointer'
-                : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700/50'
-            }`}
+            className="btn-stripe-primary py-3 px-8 text-sm"
           >
             {isGenerating ? (
               <>
-                <span className="w-4 h-4 border-2 border-slate-400 border-t-white rounded-full animate-spin shrink-0" />
+                <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin shrink-0" />
                 <span>{t.generating}</span>
               </>
             ) : (
