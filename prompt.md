@@ -30,3 +30,11 @@
    fix it
 
 10. name : mahi email- mahtab.mahi707@gmail.com
+
+11. read the docs again and start building the project
+
+12. make sure add prompt in prompt.md from start to end of the project
+
+13. build more reaiminig ppart
+
+14. node --version: node : The term 'node' is not recognized as the name of a cmdlet, function, script file, or operable program.
